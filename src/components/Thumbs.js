@@ -3,8 +3,7 @@ import Thumbnails from "./Thumbnails";
 
 export default function Thumbs(props) {
   return (
-    <div>
-      Thumbs
+    <div className="thumbs">
       <Thumbnails />
     </div>
   );

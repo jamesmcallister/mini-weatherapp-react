@@ -3,6 +3,7 @@ import Photo from "./Photo";
 import Info from "./Info";
 import Thumbs from "./Thumbs";
 import Search from "./Search";
+import Header from "./Header";
 class App extends React.Component {
   constructor(props) {
     super();
@@ -12,12 +13,13 @@ class App extends React.Component {
 
   render() {
     return (
-      <div>
+      <main className="content">
+        <Header />
         <Photo />
         <Info />
         <Thumbs />
         <Search />
-      </div>
+      </main>
     );
   }
 }
