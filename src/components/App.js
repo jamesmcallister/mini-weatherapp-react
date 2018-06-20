@@ -1,5 +1,8 @@
 import React from "react";
-
+import Photo from "./Photo";
+import Info from "./Info";
+import Thumbs from "./Thumbs";
+import Search from "./Search";
 class App extends React.Component {
   constructor(props) {
     super();
@@ -8,7 +11,14 @@ class App extends React.Component {
   }
 
   render() {
-    return "hello world!";
+    return (
+      <div>
+        <Photo />
+        <Info />
+        <Thumbs />
+        <Search />
+      </div>
+    );
   }
 }
 
