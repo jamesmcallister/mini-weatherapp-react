@@ -10,8 +10,8 @@ class App extends React.Component {
     super();
 
     this.state = {
-      currentTypeCity: '',
-      currentCity:"London",
+      currentTypeCity: "",
+      currentCity: "London",
       currentWeather: {
         location: "",
         description: "",
@@ -24,28 +24,28 @@ class App extends React.Component {
       currentCityImages: [],
 
       currentBackground: {
-        id:"",
+        id: "",
         description: "",
         color: "",
         user: {
           name: "",
-          url: "",
+          url: ""
         },
-        image:"https://images.unsplash.com/photo-1508711046474-2f4c2d3d30ca?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjI4ODk1fQ&s=fd58555505fbe94b05eb33ec5874fc5d"
-
+        image:
+          "https://images.unsplash.com/photo-1508711046474-2f4c2d3d30ca?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjI4ODk1fQ&s=fd58555505fbe94b05eb33ec5874fc5d"
       }
     };
 
-    this.handleChange=this.handleChange.bind(this);
-    this.handleSubmit=this.handleSubmit.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
     this.receiveCity = this.receiveCity.bind(this);
     this.getWeather = this.getWeather.bind(this);
     this.getImages = this.getImages.bind(this);
-    this.handleClick=this.handleClick.bind(this);
+    this.handleClick = this.handleClick.bind(this);
   }
 
-  receiveCity(currentCityFromSearch){
-    this.setState({currentCity: currentCityFromSearch}, () => {
+  receiveCity(currentCityFromSearch) {
+    this.setState({ currentCity: currentCityFromSearch }, () => {
       this.getWeather(this.state.currentCity);
       this.getImages(this.state.currentCity);
     });
@@ -67,65 +67,67 @@ class App extends React.Component {
         };
       })
       .then(reply => this.setState({ currentWeather: reply }))
-      .catch((error) => console.log(error));
+      .catch(error => console.log(error));
   }
 
-
-  getImages(city){
-    const {apiKey, url} = this.props.config.api.unsplash;
+  getImages(city) {
+    const { apiKey, url } = this.props.config.api.unsplash;
     const fetchUrl = `${url}?query=${city}&client_id=${apiKey}`;
 
-    fetch(fetchUrl).then(response => response.json())
+    fetch(fetchUrl)
+      .then(response => response.json())
       .then(data => {
-        return data.results.map(function(image){
-            // console.log(image);
-            return {
-              id: image.id,
-              description: image.description,
-              color: image.color,
-              image: image.urls.regular,
-              thumb: image.urls.thumb,
-              user: {
-                name: image.user.name,
-                url: image.user.links.self
-              }
+        return data.results.map(function(image) {
+          // console.log(image);
+          return {
+            id: image.id,
+            description: image.description,
+            color: image.color,
+            image: image.urls.regular,
+            thumb: image.urls.thumb,
+            user: {
+              name: image.user.name,
+              url: image.user.links.self
             }
-          }
-        )
-    }
-  )
-    .then(result => this.setState({currentCityImages : result, currentBackground: result[0].image}))
-    .catch(console.log)
-
+          };
+        });
+      })
+      .then(result =>
+        this.setState({
+          currentCityImages: result,
+          currentBackground: result[0]
+        })
+      )
+      .catch(console.log);
   }
 
-  componentDidMount(){
+  componentDidMount() {
     this.getWeather(this.state.currentCity);
-    this.getImages(this.state.currentCity)
+    this.getImages(this.state.currentCity);
   }
   handleChange(event) {
-    this.setState({currentTypeCity: event.target.value});
+    this.setState({ currentTypeCity: event.target.value });
   }
   handleSubmit(event) {
     event.preventDefault();
     this.receiveCity(this.state.currentTypeCity);
   }
 
-  handleClick(event, thumbnailData){
+  handleClick(event, thumbnailData) {
     event.preventDefault();
-    this.setState({currentBackground: thumbnailData})
+    this.setState({ currentBackground: thumbnailData });
   }
 
   render() {
     return (
       <main className="content">
         <Header />
-        <Photo data={this.state.currentBackground}/>
+        <Photo data={this.state.currentBackground} />
         <Info
           description={this.state.currentWeather.description}
           temp={this.state.currentWeather.temp}
           currentCity={this.state.currentCity}
-
+          user={this.state.currentBackground.user}
         />
         <Thumbs
           photos={this.state.currentCityImages}
