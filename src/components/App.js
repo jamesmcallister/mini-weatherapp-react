@@ -4,10 +4,11 @@ import Info from "./Info";
 import Thumbs from "./Thumbs";
 import Search from "./Search";
 import Header from "./Header";
+import { weatherApi, imagesApi } from "./apis";
 
 class App extends React.Component {
   constructor(props) {
-    super();
+    super(props);
 
     this.state = {
       currentTypeCity: "",
@@ -43,66 +44,36 @@ class App extends React.Component {
     this.handleClick = this.handleClick.bind(this);
   }
 
-  receiveCity(currentCityFromSearch) {
-    this.setState({ currentCity: currentCityFromSearch }, () => {
-      this.getWeather(this.state.currentCity);
-      this.getImages(this.state.currentCity);
-    });
-  }
-
   getWeather(city) {
-    const { apiKey, url } = this.props.config.api.weather;
-    fetch(`${url}?q=${city}&APPID=${apiKey}`)
-      .then(response => response.json())
-      .then(data => {
-        return {
-          location: data.name,
-          description: data.weather[0].description,
-          temp: {
-            current: data.main.temp,
-            min: data.main.temp_min,
-            max: data.main.temp_max
-          }
-        };
-      })
+    const { weather } = this.props.config.api;
+    weatherApi(city, weather.apiKey, weather.url)
       .then(reply => this.setState({ currentWeather: reply }))
       .catch(error => console.log(error));
   }
 
   getImages(city) {
-    const { apiKey, url } = this.props.config.api.unsplash;
-    const fetchUrl = `${url}?query=${city}&client_id=${apiKey}`;
-
-    fetch(fetchUrl)
-      .then(response => response.json())
-      .then(data => {
-        return data.results.map(function(image) {
-          // console.log(image);
-          return {
-            id: image.id,
-            description: image.description,
-            color: image.color,
-            image: image.urls.regular,
-            thumb: image.urls.thumb,
-            user: {
-              name: image.user.name,
-              url: image.user.links.self
-            }
-          };
-        });
-      })
+    const { unsplash } = this.props.config.api;
+    imagesApi(city, unsplash.apiKey, unsplash.url)
       .then(result =>
         this.setState({
           currentCityImages: result,
           currentBackground: result[0]
         })
       )
-      .catch(console.log);
+      .catch(error => console.log(error));
   }
 
   componentDidMount() {
+    const { weather } = this.props.config.api;
     this.getWeather(this.state.currentCity);
     this.getImages(this.state.currentCity);
+  }
+
+  receiveCity(currentCityFromSearch) {
+    this.setState({ currentCity: currentCityFromSearch }, () => {
+      this.getWeather(this.state.currentCity);
+      this.getImages(this.state.currentCity);
+    });
   }
   handleChange(event) {
     this.setState({ currentTypeCity: event.target.value });
@@ -144,7 +115,5 @@ class App extends React.Component {
     );
   }
 }
-
-App.defaultProps = {};
 
 export default App;
