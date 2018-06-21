@@ -23,7 +23,17 @@ class App extends React.Component {
       },
       currentCityImages: [],
 
-      currentBackground: "https://images.unsplash.com/photo-1508711046474-2f4c2d3d30ca?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjI4ODk1fQ&s=fd58555505fbe94b05eb33ec5874fc5d"
+      currentBackground: {
+        id:"",
+        description: "",
+        color: "",
+        user: {
+          name: "",
+          url: "",
+        },
+        image:"https://images.unsplash.com/photo-1508711046474-2f4c2d3d30ca?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjI4ODk1fQ&s=fd58555505fbe94b05eb33ec5874fc5d"
+
+      }
     };
 
     this.handleChange=this.handleChange.bind(this);
@@ -101,20 +111,21 @@ class App extends React.Component {
     this.receiveCity(this.state.currentTypeCity);
   }
 
-  handleClick(event, image){
+  handleClick(event, thumbnailData){
     event.preventDefault();
-    this.setState({currentBackground: image})
+    this.setState({currentBackground: thumbnailData})
   }
 
   render() {
     return (
       <main className="content">
         <Header />
-        <Photo backgroundUrl={this.state.currentBackground}/>
+        <Photo data={this.state.currentBackground}/>
         <Info
           description={this.state.currentWeather.description}
           temp={this.state.currentWeather.temp}
           currentCity={this.state.currentCity}
+
         />
         <Thumbs
           photos={this.state.currentCityImages}

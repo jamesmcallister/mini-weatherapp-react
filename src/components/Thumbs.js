@@ -6,7 +6,9 @@ export default function Thumbs(props) {
   return (
     <div className="thumbs">
       {props.photos.map(function(thumb){
-          return <Thumbnails key={thumb.id} data={thumb} handleClick={props.handleClick}/>
+          return <Thumbnails key={thumb.id}
+            data={thumb}
+            handleClick={props.handleClick}/>
           }
         )
       }
