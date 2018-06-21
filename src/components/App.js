@@ -22,7 +22,6 @@ class App extends React.Component {
         }
       },
       currentCityImages: [],
-
       currentBackground: {
         id: "",
         description: "",
@@ -120,7 +119,10 @@ class App extends React.Component {
 
   render() {
     return (
-      <main className="content">
+      <main
+        className="content"
+        style={{ backgroundColor: `${this.state.currentBackground.color}` }}
+      >
         <Header />
         <Photo data={this.state.currentBackground} />
         <Info

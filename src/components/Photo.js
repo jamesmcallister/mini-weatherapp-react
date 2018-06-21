@@ -2,10 +2,7 @@ import React from "react";
 
 function Photo(props) {
   return (
-    <figure
-      className="photo"
-      style={{ backgroundColor: `${props.data.color}` }}
-    >
+    <figure className="photo">
       <img src={props.data.image} alt="" />
     </figure>
   );
